@@ -4,7 +4,8 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 // Inclure l'autoloader de Composer
-require 'vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
+
 
 // Configuration SMTP
 define('SMTP_HOST', 'mail.privateemail.com');
@@ -63,12 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->SMTPAuth = true;
             $mail->Username = SMTP_USERNAME;
             $mail->Password = SMTP_PASSWORD;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SSL; // Changé pour SSL au lieu de TLS
+            $mail->SMTPSecure = "tls"; // Changé pour SSL au lieu de TLS
             $mail->Port = SMTP_PORT;
             $mail->CharSet = 'UTF-8';
             
             // Debug mode si nécessaire (à commenter en production)
-            // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
             // Expéditeur et destinataires
             $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
