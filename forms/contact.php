@@ -6,11 +6,11 @@ use PHPMailer\PHPMailer\Exception;
 require __DIR__ . '/../vendor/autoload.php';
 
 // SMTP Configuration
-define('SMTP_HOST', 'mail.privateemail.com');
-define('SMTP_USERNAME', 'contact@ismail-mouyahada.com');
-define('SMTP_PASSWORD', 'dummy-smtp-password'); // Ensure this is accurate
+define('SMTP_HOST', '-');
+define('SMTP_USERNAME', '-');
+define('SMTP_PASSWORD', '-'); // Ensure this is accurate
 define('SMTP_PORT', 465); // Using port 587 for STARTTLS
-define('SMTP_FROM_EMAIL', 'contact@ismail-mouyahada.com');
+define('SMTP_FROM_EMAIL', '-');
 define('SMTP_FROM_NAME', 'MOUYAHADA Ismail');
 define('SMTP_TO_EMAIL', 'ismail.mouyahada@gmail.com');
 
