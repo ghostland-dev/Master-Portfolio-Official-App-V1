@@ -53,6 +53,7 @@
   <meta property="og:title" content="Ismail MouYahada - Accueil" />
   <meta property="og:description" content="Portfolio personnel d'Ismail MouYahada, présentant ses compétences en développement informatique, DevOps, conception d'applications web et mobile, et bien plus encore." />
   <meta property="og:image" content="https://www.ismail-mouyahada.com/assets/img/whatsapp-image.jpg" />
+  
 </head>
 
 <body>
@@ -1155,6 +1156,8 @@
   </div>
 
   <!-- Vendor JS Files -->
+
+  
   <script src="/assets/vendor/purecounter/purecounter_vanilla.js"></script>
   <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
@@ -1165,6 +1168,8 @@
 
   <!-- Template Main JS File -->
   <script src="/assets/js/main.js"></script>
+
+  <script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="76eb922e-549f-4e76-9634-dbe530927b4a";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script>
 </body>
 
 </html>
