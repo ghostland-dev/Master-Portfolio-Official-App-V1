@@ -78,7 +78,7 @@
   <!-- ======= Header ======= -->
   <header id="header" class="header">
     <div class="container main-container">
-      <h1><a href="#" title="Magnificent">Mou<span class="special" title="Youthful">Y</span>ahada I<span class="special"
+      <h1><a href="/" title="Magnificent">Mou<span class="special" title="Youthful">Y</span>ahada I<span class="special"
             title="Youthful">sm</span>a<span class="special" title="Youthful">il</span></a></h1>
 
       <!-- Uncomment below if you prefer to use an image logo -->
