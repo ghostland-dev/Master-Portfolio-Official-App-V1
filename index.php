@@ -65,7 +65,7 @@
       <!-- <a href="index.html" class="mr-auto"><img src="/assets/img/logo.png" alt="" class="img-fluid"></a> -->
       <h2>
         <span title="Concepteur et développeur d'application" data-toggle="tooltip" data-placement="top" class="special-slim">
-          <br> Développeur full stack & Architecte de Systèmes d'Information
+          <br/> Développeur full stack & Architecte de Systèmes d'Information
         </span>
       </h2>
 
