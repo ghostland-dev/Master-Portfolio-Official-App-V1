@@ -1,123 +1,103 @@
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// Inclure l'autoloader de Composer
+// Include Composer's autoloader
 require __DIR__ . '/../vendor/autoload.php';
 
-
-// Configuration SMTP
+// SMTP Configuration
 define('SMTP_HOST', 'mail.privateemail.com');
 define('SMTP_USERNAME', 'contact@ismail-mouyahada.com');
-define('SMTP_PASSWORD', 'dummy-smtp-password');
-define('SMTP_PORT', 465);
-define('SMTP_FROM_EMAIL', 'contact@ismail-mouyahada.com'); // Changé pour correspondre au SMTP_USERNAME
+define('SMTP_PASSWORD', 'dummy-smtp-password'); // Ensure this is accurate
+define('SMTP_PORT', 465); // Using port 587 for STARTTLS
+define('SMTP_FROM_EMAIL', 'contact@ismail-mouyahada.com');
 define('SMTP_FROM_NAME', 'MOUYAHADA Ismail');
 define('SMTP_TO_EMAIL', 'ismail.mouyahada@gmail.com');
 
-// Fonction pour nettoyer les données
+ 
+// Function to sanitize input
 function cleanInput($data) {
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
+    return htmlspecialchars(stripslashes(trim($data)));
 }
 
-// Vérifier si le formulaire a été soumis
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Récupérer et nettoyer les données du formulaire
-    $name = cleanInput($_POST['name']);
-    $email = cleanInput($_POST['email']);
-    $subject = cleanInput($_POST['subject']);
-    $message = cleanInput($_POST['message']);
-    
-    // Validation des champs
-    $errors = array();
-    
-    if (empty($name)) {
-        $errors[] = "Le nom est requis";
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = cleanInput($_POST['name'] ?? '');
+    $email = cleanInput($_POST['email'] ?? '');
+    $subject = cleanInput($_POST['subject'] ?? '');
+    $message = cleanInput($_POST['message'] ?? '');
+
+    // Validation
+    $errors = [];
+    if (empty($name) || strlen($name) > 100) {
+        $errors[] = "Le nom est requis et ne doit pas dépasser 100 caractères.";
     }
-    
-    if (empty($email)) {
-        $errors[] = "L'email est requis";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Format d'email invalide";
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Un email valide est requis.";
     }
-    
-    if (empty($subject)) {
-        $errors[] = "Le sujet est requis";
+    if (empty($subject) || strlen($subject) > 150) {
+        $errors[] = "Le sujet est requis et ne doit pas dépasser 150 caractères.";
     }
-    
-    if (empty($message)) {
-        $errors[] = "Le message est requis";
+    if (empty($message) || strlen($message) > 1000) {
+        $errors[] = "Le message est requis et ne doit pas dépasser 1000 caractères.";
     }
-    
-    // Si pas d'erreurs, envoyer l'email
+
+    // Process email if no errors
     if (empty($errors)) {
-        $mail = new PHPMailer(true);
-        
+        $mail = new PHPMailer(true);  // Exception handling enabled
         try {
-            // Configuration du serveur
+            // Server settings
             $mail->isSMTP();
             $mail->Host = SMTP_HOST;
             $mail->SMTPAuth = true;
             $mail->Username = SMTP_USERNAME;
             $mail->Password = SMTP_PASSWORD;
-            $mail->SMTPSecure = "tls"; // Changé pour SSL au lieu de TLS
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Use STARTTLS for port 587
             $mail->Port = SMTP_PORT;
             $mail->CharSet = 'UTF-8';
-            
-            // Debug mode si nécessaire (à commenter en production)
-            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 
-            // Expéditeur et destinataires
+            // Enable SMTP debugging for error details
+            $mail->SMTPDebug = 2; // More detailed debug output
+
+            // Sender and recipient
             $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
-            $mail->addAddress(SMTP_TO_EMAIL); // Envoyer à votre adresse principale
+            $mail->addAddress(SMTP_TO_EMAIL);  // Send to your email
             $mail->addReplyTo($email, $name);
 
-            // Contenu de l'email
+            // Email content
             $mail->isHTML(true);
             $mail->Subject = "Nouveau message de contact: " . $subject;
-            
-            // Corps du message en HTML
-            $messageBody = "
-            <h2>Nouveau message de contact via le formulaire du site</h2>
-            <p><strong>Nom:</strong> {$name}</p>
-            <p><strong>Email:</strong> {$email}</p>
-            <p><strong>Sujet:</strong> {$subject}</p>
-            <p><strong>Message:</strong></p>
-            <p>" . nl2br(htmlspecialchars($message)) . "</p>
+            $mail->Body = "
+                <h2>Nouveau message via le formulaire du site</h2>
+                <p><strong>Nom:</strong> {$name}</p>
+                <p><strong>Email:</strong> {$email}</p>
+                <p><strong>Sujet:</strong> {$subject}</p>
+                <p><strong>Message:</strong></p>
+                <p>" . nl2br($message) . "</p>
             ";
+            $mail->AltBody = strip_tags(str_replace('<br>', "\n", $message));
 
-            $mail->Body = $messageBody;
-            $mail->AltBody = strip_tags(str_replace('<br>', "\n", $messageBody));
-
+            // Send the email
             if ($mail->send()) {
-                // Email envoyé avec succès
-                $response = array(
+                $response = [
                     "status" => "success",
-                    "message" => "Votre message a été envoyé. Merci !"
-                );
-            } else {
-                throw new Exception($mail->ErrorInfo);
+                    "message" => "Votre message a été envoyé avec succès !"
+                ];
             }
-
         } catch (Exception $e) {
-            $response = array(
+            $response = [
                 "status" => "error",
                 "message" => "Une erreur est survenue lors de l'envoi : " . $e->getMessage()
-            );
+            ];
         }
     } else {
-        // Erreurs de validation
-        $response = array(
+        $response = [
             "status" => "error",
             "message" => implode(", ", $errors)
-        );
+        ];
     }
-    
-    // Retourner la réponse en JSON
+
+    // Return JSON response
     header('Content-Type: application/json');
     echo json_encode($response);
     exit;

@@ -173,7 +173,7 @@
                 </li>
                 <li>
                   <i class="bi bi-chevron-right"></i> <strong>Email:</strong>
-                  <span>ismail.mouyahada@developer.net</span>
+                  <span>ismail.mouyahada@gmail.com</span>
                 </li>
                 <li>
                   <i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Indisponible Actuellement</span>
